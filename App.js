@@ -1,10 +1,18 @@
 import React from 'react';
-import {NativeBaseProvider, Box} from 'native-base';
+import {NativeBaseProvider} from 'native-base';
+
+// import pages
+// import Intro from './pages/intro';
+// import SignIn from './pages/signin';
+// import SignUp from './pages/signup';
+import Home from './pages/home';
+
+// set up navigation
 
 function App() {
   return (
     <NativeBaseProvider>
-      <Box>Hello world</Box>
+      <Home />
     </NativeBaseProvider>
   );
 }
