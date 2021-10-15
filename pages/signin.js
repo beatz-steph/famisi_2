@@ -9,7 +9,11 @@ const Logo = require('../assets/logo.png');
 import Button from '../components/button';
 import Input from '../components/input';
 
-const Intro = () => {
+const SignIn = ({navigation, setInitial}) => {
+  const onContinue = () => {
+    setInitial('home');
+  };
+
   return (
     <SView>
       <LogoImage>
@@ -29,10 +33,10 @@ const Intro = () => {
         <ForgotText>Forgot password?</ForgotText>
       </Forgot>
       <ButtonHolder>
-        <Button text="Continue" />
+        <Button text="Continue" onPress={onContinue} />
       </ButtonHolder>
       <SignUp>
-        <DontHaveAccount>
+        <DontHaveAccount onPress={() => navigation.push('SignUp')}>
           Don’t have an account? <GreenText>Create</GreenText>
         </DontHaveAccount>
       </SignUp>
@@ -80,4 +84,4 @@ const GreenText = styled(Text)`
   ${[t.textGreen500]}
 `;
 
-export default Intro;
+export default SignIn;

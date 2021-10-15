@@ -3,9 +3,9 @@ import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Text, Button} from 'native-base';
 
-const ButtonComponent = ({text, onClick, Icon}) => {
+const ButtonComponent = ({text, onPress, Icon}) => {
   return (
-    <ButtonBody>
+    <ButtonBody onPress={onPress}>
       <ButtonText>{text}</ButtonText>
     </ButtonBody>
   );

@@ -16,10 +16,10 @@ const Logo = require('../assets/logo.png');
 import Button from '../components/button';
 import Input from '../components/input';
 
-const Intro = () => {
+const SignUpScreen = ({navigation}) => {
   return (
     <SView>
-      <BackButton>
+      <BackButton onPress={() => navigation.goBack()}>
         <Box>
           <ChevronLeftIcon size="6" />
         </Box>
@@ -52,7 +52,7 @@ const Intro = () => {
           <Button text="Continue" />
         </ButtonHolder>
         <SignUp>
-          <DontHaveAccount>
+          <DontHaveAccount onPress={() => navigation.goBack()}>
             Already have an account? <GreenText>Sign in</GreenText>
           </DontHaveAccount>
         </SignUp>
@@ -105,4 +105,4 @@ const GreenText = styled(Text)`
   ${[t.textGreen500]}
 `;
 
-export default Intro;
+export default SignUpScreen;

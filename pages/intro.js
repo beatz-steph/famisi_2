@@ -8,7 +8,11 @@ const Logo = require('../assets/logo.png');
 // component
 import Button from '../components/button';
 
-const Intro = () => {
+const Intro = ({setAuth}) => {
+  const onContinue = () => {
+    console.log('hello');
+    setAuth(true);
+  };
   return (
     <SView>
       <LogoImage>
@@ -22,7 +26,7 @@ const Intro = () => {
       </IntroText>
 
       <ButtonHolder>
-        <Button text="Continue" />
+        <Button text="Continue" onPress={onContinue} />
       </ButtonHolder>
     </SView>
   );
