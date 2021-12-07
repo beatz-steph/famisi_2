@@ -12,7 +12,7 @@ const ButtonComponent = ({text, onPress, Icon}) => {
 };
 
 const ButtonBody = styled(Button)`
-  ${[t.bgGreen500, t.itemsCenter, t.flex]}
+  ${[t.bgGreen500, t.itemsCenter, t.flex, t.roundedSm]}
 `;
 
 const ButtonText = styled(Text)`

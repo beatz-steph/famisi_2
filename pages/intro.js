@@ -45,7 +45,7 @@ const LogoImage = styled(Box)`
 `;
 
 const ButtonHolder = styled(Box)`
-  ${[t.mT16]}
+  ${[t.mT24]}
 `;
 
 export default Intro;

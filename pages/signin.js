@@ -33,7 +33,7 @@ const SignIn = ({navigation, setInitial}) => {
         <ForgotText>Forgot password?</ForgotText>
       </Forgot>
       <ButtonHolder>
-        <Button text="Continue" onPress={onContinue} />
+        <Button text="Sign in" onPress={onContinue} />
       </ButtonHolder>
       <SignUp>
         <DontHaveAccount onPress={() => navigation.push('SignUp')}>
@@ -61,7 +61,7 @@ const InputWrapper = styled(Box)`
 `;
 
 const ButtonHolder = styled(Box)`
-  ${[t.mT10]}
+  ${[t.mT20]}
 `;
 
 const Forgot = styled(Box)`

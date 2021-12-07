@@ -1,35 +1,58 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {ImageBackground} from 'react-native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
-import {Text, Box} from 'native-base';
+import {Text, Box, Pressable} from 'native-base';
 
-const Zone = () => {
+const Bg = require('../assets/bg.png');
+
+const Zone = ({navigation}) => {
   return (
     <Holder>
-      <TopZone>
-        <TopZoneText>Play with friends</TopZoneText>
-      </TopZone>
-      <BottomZone>
-        <BottomZoneText>Practice zone</BottomZoneText>
-      </BottomZone>
+      <BgImage source={Bg} alt="bg">
+        <TopZonePress>
+          <TopZone>
+            <TopZoneText>Play with friends</TopZoneText>
+          </TopZone>
+        </TopZonePress>
+        <BottomZonePress
+          onPress={() => {
+            navigation.navigate('Practice');
+          }}>
+          <BottomZone>
+            <BottomZoneText>Practice zone</BottomZoneText>
+          </BottomZone>
+        </BottomZonePress>
+      </BgImage>
     </Holder>
   );
 };
 
 const Holder = styled(Box)`
-  ${[t.mT16]}
+  ${[t.mT10, t.mB20, {height: '450'}]};
+`;
+
+const TopZonePress = styled(Pressable)`
+  ${[{height: '50%'}]}
+`;
+
+const BottomZonePress = styled(Pressable)`
+  ${[{height: '50%'}]}
 `;
 
 const TopZone = styled(Box)`
   ${[
-    {backgroundColor: '#364956'},
-    t.h56,
+    {height: '100%'},
     t.flex,
     t.itemsCenter,
     t.justifyCenter,
     t.roundedSm,
-    t.mB6,
+    t.relative,
   ]}
+`;
+
+const BgImage = styled(ImageBackground)`
+  ${[t.hFull, t.objectContain, t.wFull]}
 `;
 
 const TopZoneText = styled(Text)`
@@ -37,14 +60,7 @@ const TopZoneText = styled(Text)`
 `;
 
 const BottomZone = styled(Box)`
-  ${[
-    {backgroundColor: '#EEF3F7'},
-    t.h56,
-    t.flex,
-    t.itemsCenter,
-    t.justifyCenter,
-    t.roundedSm,
-  ]}
+  ${[{height: '100%'}, t.flex, t.itemsCenter, t.justifyCenter, t.roundedSm]}
 `;
 
 const BottomZoneText = styled(Text)`
