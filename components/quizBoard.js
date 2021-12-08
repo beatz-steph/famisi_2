@@ -3,14 +3,14 @@ import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Text} from 'native-base';
 
-const QuizBoard = () => {
+const QuizBoard = ({word, meaning}) => {
   return (
     <QuizBoardBody>
       <QuizMain>
-        <QuizMainText>Ibere</QuizMainText>
+        <QuizMainText>{word}</QuizMainText>
       </QuizMain>
       <QuizSub>
-        <QuizSubText>Meaning: begining</QuizSubText>
+        <QuizSubText>Meaning: {meaning}</QuizSubText>
       </QuizSub>
     </QuizBoardBody>
   );

@@ -1,19 +1,21 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {ImageBackground} from 'react-native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Image, Pressable, Text} from 'native-base';
+import QuizContext from './quizContext';
 
 // image
 const SuceessImg = require('../../assets/successBg.png');
 const Coin = require('../../assets/coin.png');
 
 // component
-import ButtonComponent from '../../components/button';
 
 // dummy
+import {calculateResult} from '../../functions';
 
 const Success = ({navigation}) => {
+  const {quiz, answers} = useContext(QuizContext);
   return (
     <SView>
       <SuccessBg source={SuceessImg} alt="bg">
@@ -23,7 +25,9 @@ const Success = ({navigation}) => {
               Congratulations, practice completed
             </SuccessCardTopText>
           </SuccessCardTopTextHolder>
-          <SuccessCardScore>Score 7/10</SuccessCardScore>
+          <SuccessCardScore>
+            Score {Math.floor((calculateResult(quiz, answers) / 6) * 100)} %
+          </SuccessCardScore>
           <SuccessCardPointHolder>
             <SuccessCardPointHolderText>
               You have earn 500

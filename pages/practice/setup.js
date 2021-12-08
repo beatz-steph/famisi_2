@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-// import {useRoute} from '@react-navigation/native';
+import React, {useState, useContext} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {
@@ -11,6 +10,7 @@ import {
   Select,
   CheckIcon,
 } from 'native-base';
+import QuizContext from './quizContext';
 
 // image
 const Arrow = require('../../assets/arrow.png');
@@ -19,27 +19,38 @@ const Arrow = require('../../assets/arrow.png');
 import ButtonComponent from '../../components/button';
 
 // dummy
-const categoryList = [
-  {name: 'Numbers', value: 'numbers'},
-  {name: 'Nouns', value: 'nouns'},
-  {name: 'Pronouns', value: 'pronouns'},
-  {name: 'Verbs', value: 'verbs'},
-  {name: 'Adverbs', value: 'adverbs'},
-  {name: 'Adjective', value: 'adjective'},
-];
+// const categoryList = [
+//   {name: 'Numbers', value: 'numbers'},
+//   {name: 'Nouns', value: 'nouns'},
+//   {name: 'Pronouns', value: 'pronouns'},
+//   {name: 'Verbs', value: 'verbs'},
+//   {name: 'Adverbs', value: 'adverbs'},
+//   {name: 'Adjective', value: 'adjective'},
+// ];
 const difficultyList = [
   {name: 'Easy', value: 'easy'},
-  {name: 'Medium', value: 'medium'},
-  {name: 'Difficult', value: 'difficult'},
+  {name: 'Intermediate', value: 'intermediate'},
+  {name: 'Difficult', value: 'hard'},
 ];
 
+import {generateQuiz} from '../../functions';
+
 const Setup = ({navigation}) => {
-  //   const route = useRoute();
+  const {setQuiz} = useContext(QuizContext);
 
   //   state
-  const [category, setCategory] = useState('');
+  //   const [category, setCategory] = useState('');
 
   const [difficulty, setDifficulty] = useState('');
+
+  const onStart = () => {
+    console.log('start');
+    const quiz = generateQuiz(difficulty);
+
+    setQuiz(quiz);
+
+    navigation.navigate('Quiz');
+  };
 
   return (
     <SView>
@@ -60,8 +71,8 @@ const Setup = ({navigation}) => {
         </BackButton>
       </Pressable>
 
-      <ButtonComponent text="Randomize" />
-      <CategorySelect>
+      {/* <ButtonComponent text="Randomize" /> */}
+      {/* <CategorySelect>
         <Select
           selectedValue={category}
           minWidth="200"
@@ -83,7 +94,7 @@ const Setup = ({navigation}) => {
             );
           })}
         </Select>
-      </CategorySelect>
+      </CategorySelect> */}
 
       <CategorySelect>
         <Select
@@ -109,8 +120,8 @@ const Setup = ({navigation}) => {
         </Select>
       </CategorySelect>
       <StartHolder>
-        {category && difficulty ? (
-          <StartButton onPress={() => navigation.navigate('Quiz')}>
+        {difficulty ? (
+          <StartButton onPress={onStart}>
             <StartIcon source={Arrow} alt="start" />
           </StartButton>
         ) : null}

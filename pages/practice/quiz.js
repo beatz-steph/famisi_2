@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Image, Pressable, ScrollView} from 'native-base';
+import QuizContext from './quizContext';
 
 // image
 const Close = require('../../assets/close.png');
@@ -11,16 +12,29 @@ import QuizBoard from '../../components/quizBoard';
 import QuizOption from '../../components/quizOption';
 import ButtonComponent from '../../components/button';
 
-// dummy
-const options = [
-  {name: 'Ibere', value: '1'},
-  {name: 'Ibere', value: '2'},
-  {name: 'Ibere', value: '3'},
-  {name: 'Ibere', value: '4'},
-];
-
 const Quiz = ({navigation}) => {
+  const {quiz, answers, setAnswers} = useContext(QuizContext);
+  const [current, setCurrent] = useState(0);
+  const [data, setData] = useState({});
   const [selected, setSelected] = useState('');
+
+  const __handleNext = () => {
+    if (answers.length === 5) {
+      setAnswers(prevanswers => [...prevanswers, selected]);
+      navigation.navigate('Success');
+      console.log({answers, quiz});
+    } else {
+      setAnswers(prevanswers => [...prevanswers, selected]);
+      setSelected('');
+      setCurrent(prevcurrent => prevcurrent + 1);
+
+      console.log({answers, quiz});
+    }
+  };
+
+  useEffect(() => {
+    setData(quiz[current]);
+  }, [current, quiz]);
   return (
     <SView>
       <Top>
@@ -31,27 +45,26 @@ const Quiz = ({navigation}) => {
 
       {/* quiz */}
       <QuizBoardHolder>
-        <QuizBoard />
+        <QuizBoard word={data.word} meaning={data.meaning} />
       </QuizBoardHolder>
       <QuizOptionHolder>
-        {options.map((item, index) => {
-          return (
-            <QuizOption
-              key={`quizOption__${index}`}
-              name={item.name}
-              active={selected}
-              onSelect={setSelected}
-              value={item.value}
-            />
-          );
-        })}
+        {data &&
+          data.options &&
+          data.options.map((item, index) => {
+            return (
+              <QuizOption
+                key={`quizOption__${index}`}
+                name={item}
+                active={selected}
+                onSelect={setSelected}
+                value={item}
+              />
+            );
+          })}
       </QuizOptionHolder>
       <ButtonComponentHolder>
         {selected ? (
-          <ButtonComponent
-            text="next"
-            onPress={() => navigation.navigate('Success')}
-          />
+          <ButtonComponent text="next" onPress={__handleNext} />
         ) : null}
       </ButtonComponentHolder>
     </SView>
