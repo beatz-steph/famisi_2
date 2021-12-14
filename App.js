@@ -9,10 +9,13 @@ import Intro from './pages/intro';
 import SignIn from './pages/signin';
 import SignUp from './pages/signup';
 import Home from './pages/home';
-import Practice from './pages/practice';
+import Play from './pages/play';
+import Games from './pages/games';
+
+// quiz context
+import QuizContext from './pages/play/quizContext';
 
 // set up navigation
-import MyTabBar from './components/tabBar';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -20,46 +23,97 @@ function App() {
   const [initial, setInitial] = useState('auth');
   const [auth, setAuth] = useState(false);
   const [showBottomNavBar, setShowBottomNavBar] = useState(true);
+
+  // states for quiz
+  const [play, setPlay] = useState('');
+  const [quiz, setQuiz] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [friendsList, setFriendsList] = useState([
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      name: 'First Item',
+      imageUrl:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbG9xj0XIQP_3kdm-LZelILnKlD4wvQLrJqL7S5cIweIeUr1amHL1YK-zUnFsgV2RjwLc&usqp=CAU',
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      name: 'Second Item',
+      imageUrl: '',
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571e29d72',
+      name: 'Third Item',
+      imageUrl: '',
+    },
+  ]);
+
+  const [games, setGames] = useState([]);
+
+  const resetAllQuizInfo = () => {
+    setQuiz([]);
+    setAnswers([]);
+    setSelectedFriend([]);
+  };
+
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
-        {auth && initial !== 'auth' ? (
-          <Tab.Navigator
-            screenOptions={{headerShown: false}}
-            tabBar={props => null}>
-            <Tab.Screen name="Home">
-              {props => (
-                <Home {...props} setShowBottomNavBar={setShowBottomNavBar} />
-              )}
-            </Tab.Screen>
-            <Tab.Screen name="Practice">
-              {props => (
-                <Practice
-                  {...props}
-                  setShowBottomNavBar={setShowBottomNavBar}
-                />
-              )}
-            </Tab.Screen>
-          </Tab.Navigator>
-        ) : null}
+    <QuizContext.Provider
+      value={{
+        play,
+        setPlay,
+        quiz,
+        setQuiz,
+        answers,
+        setAnswers,
+        selectedFriend,
+        setSelectedFriend,
+        friendsList,
+        setFriendsList,
+        resetAllQuizInfo,
+      }}>
+      <NavigationContainer>
+        <NativeBaseProvider>
+          {auth && initial !== 'auth' ? (
+            <Tab.Navigator
+              screenOptions={{headerShown: false}}
+              tabBar={props => null}>
+              <Tab.Screen name="Home">
+                {props => (
+                  <Home {...props} setShowBottomNavBar={setShowBottomNavBar} />
+                )}
+              </Tab.Screen>
+              <Tab.Screen name="Play">
+                {props => (
+                  <Play {...props} setShowBottomNavBar={setShowBottomNavBar} />
+                )}
+              </Tab.Screen>
 
-        {auth && initial !== 'home' ? (
-          <Stack.Navigator
-            initialRouteName="SignIn"
-            screenOptions={{headerShown: false}}>
-            <Stack.Screen name="SignIn" setInitial={setInitial}>
-              {props => <SignIn {...props} setInitial={setInitial} />}
-            </Stack.Screen>
+              <Tab.Screen name="Games">
+                {props => (
+                  <Games {...props} setShowBottomNavBar={setShowBottomNavBar} />
+                )}
+              </Tab.Screen>
+            </Tab.Navigator>
+          ) : null}
 
-            <Stack.Screen name="SignUp">
-              {props => <SignUp {...props} setInitial={setInitial} />}
-            </Stack.Screen>
-          </Stack.Navigator>
-        ) : null}
+          {auth && initial !== 'home' ? (
+            <Stack.Navigator
+              initialRouteName="SignIn"
+              screenOptions={{headerShown: false}}>
+              <Stack.Screen name="SignIn" setInitial={setInitial}>
+                {props => <SignIn {...props} setInitial={setInitial} />}
+              </Stack.Screen>
 
-        {!auth ? <Intro setAuth={setAuth} /> : null}
-      </NativeBaseProvider>
-    </NavigationContainer>
+              <Stack.Screen name="SignUp">
+                {props => <SignUp {...props} setInitial={setInitial} />}
+              </Stack.Screen>
+            </Stack.Navigator>
+          ) : null}
+
+          {!auth ? <Intro setAuth={setAuth} /> : null}
+        </NativeBaseProvider>
+      </NavigationContainer>
+    </QuizContext.Provider>
   );
 }
 

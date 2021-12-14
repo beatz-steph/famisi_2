@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {ImageBackground} from 'react-native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
@@ -6,18 +6,28 @@ import {Text, Box, Pressable} from 'native-base';
 
 const Bg = require('../assets/bg.png');
 
+import {play_type} from '../constatnts';
+
+import QuizContext from '../pages/play/quizContext';
+
 const Zone = ({navigation}) => {
+  const {setPlay} = useContext(QuizContext);
   return (
     <Holder>
       <BgImage source={Bg} alt="bg">
-        <TopZonePress>
+        <TopZonePress
+          onPress={() => {
+            setPlay(play_type.online);
+            navigation.navigate('Play');
+          }}>
           <TopZone>
             <TopZoneText>Play with friends</TopZoneText>
           </TopZone>
         </TopZonePress>
         <BottomZonePress
           onPress={() => {
-            navigation.navigate('Practice');
+            setPlay(play_type.local);
+            navigation.navigate('Play');
           }}>
           <BottomZone>
             <BottomZoneText>Practice zone</BottomZoneText>

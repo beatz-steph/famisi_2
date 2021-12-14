@@ -1,23 +1,31 @@
 import React from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
-import {Text, Image, Box} from 'native-base';
+import {Text, Image, Box, Pressable} from 'native-base';
 
 // images
 const Home = require('../assets/home.png');
 const Board = require('../assets/board.png');
 
-const MyTabBar = ({navigation, showBottomNavBar}) => {
+const MyTabBar = ({navigation, showBottomNavBar, active}) => {
   return (
     <FooterHolder showBottomNavBar={showBottomNavBar}>
       <FooterInner>
-        <OptionHolder>
-          <OptionActive>
+        <OptionHolder
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <OptionActive active={active === 'Home'}>
             <HomeImage source={Home} alt="home" />
           </OptionActive>
         </OptionHolder>
-        <OptionHolder>
-          <HomeImage source={Board} alt="board" />
+        <OptionHolder
+          onPress={() => {
+            navigation.navigate('Games');
+          }}>
+          <OptionActive active={active === 'Games'}>
+            <HomeImage source={Board} alt="board" />
+          </OptionActive>
         </OptionHolder>
       </FooterInner>
     </FooterHolder>
@@ -56,7 +64,7 @@ const FooterInner = styled(Box)`
   ]}
 `;
 
-const OptionHolder = styled(Box)`
+const OptionHolder = styled(Pressable)`
   ${[]}
 `;
 
@@ -65,7 +73,8 @@ const OptionActive = styled(Box)`
     t.h10,
     t.w10,
     t.roundedFull,
-    t.bgGray700,
+
+    {background: props => (props.active ? '#364956' : '#11111100')},
     t.flex,
     t.itemsCenter,
     t.justifyCenter,

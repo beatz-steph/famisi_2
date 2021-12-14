@@ -17,7 +17,7 @@ const Intro = ({setAuth}) => {
     <SView>
       <LogoImage>
         <Center>
-          <Image source={Logo} alt="logo" />
+          <Icon source={Logo} alt="logo" />
         </Center>
       </LogoImage>
 
@@ -41,7 +41,11 @@ const IntroText = styled(Text)`
 `;
 
 const LogoImage = styled(Box)`
-  ${[t.mT56, t.mB16]}
+  ${[t.mT56, t.mB16, t.w0]}
+`;
+
+const Icon = styled(Image)`
+  ${[t.h8, t.objectContain, t.w10]}
 `;
 
 const ButtonHolder = styled(Box)`

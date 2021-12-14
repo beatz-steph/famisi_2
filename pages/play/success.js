@@ -10,8 +10,6 @@ const SuceessImg = require('../../assets/successBg.png');
 const Coin = require('../../assets/coin.png');
 
 // component
-
-// dummy
 import {calculateResult} from '../../functions';
 
 const Success = ({navigation}) => {
@@ -28,12 +26,7 @@ const Success = ({navigation}) => {
           <SuccessCardScore>
             Score {Math.floor((calculateResult(quiz, answers) / 6) * 100)} %
           </SuccessCardScore>
-          <SuccessCardPointHolder>
-            <SuccessCardPointHolderText>
-              You have earn 500
-            </SuccessCardPointHolderText>
-            <SuccessCardPointHolderImage source={Coin} alt="coin" />
-          </SuccessCardPointHolder>
+
           <SuccessCardButton
             onPress={() => {
               navigation.reset({
@@ -58,7 +51,7 @@ const SuccessBg = styled(ImageBackground)`
 `;
 
 const SuccessCard = styled(Box)`
-  ${[t.w64, t.bgGray600, t.roundedSm, t.pX4, t.pY8, t.flex, t.itemsCenter]}
+  ${[t.w64, t.bgGray700, t.roundedSm, t.pX4, t.pY8, t.flex, t.itemsCenter]}
 `;
 
 const SuccessCardTopText = styled(Text)`
@@ -70,16 +63,7 @@ const SuccessCardTopTextHolder = styled(Text)`
 `;
 
 const SuccessCardScore = styled(Text)`
-  ${[t.text4xl, t.textWhite]}
-`;
-const SuccessCardPointHolder = styled(Box)`
-  ${[t.mT4, t.flex, t.flexRow, t.itemsCenter, t.mB4]}
-`;
-const SuccessCardPointHolderText = styled(Text)`
-  ${[t.textWhite]}
-`;
-const SuccessCardPointHolderImage = styled(Image)`
-  ${[t.h8, t.objectContain, t.w10]}
+  ${[t.text4xl, t.textWhite, t.mB4]}
 `;
 
 const SuccessCardButton = styled(Pressable)`

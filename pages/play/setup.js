@@ -9,6 +9,7 @@ import {
   Pressable,
   Select,
   CheckIcon,
+  Modal,
 } from 'native-base';
 import QuizContext from './quizContext';
 
@@ -16,32 +17,21 @@ import QuizContext from './quizContext';
 const Arrow = require('../../assets/arrow.png');
 
 // component
-import ButtonComponent from '../../components/button';
+import FriendList from '../../components/friendList';
+import FriendModal from '../../components/friendModal';
 
-// dummy
-// const categoryList = [
-//   {name: 'Numbers', value: 'numbers'},
-//   {name: 'Nouns', value: 'nouns'},
-//   {name: 'Pronouns', value: 'pronouns'},
-//   {name: 'Verbs', value: 'verbs'},
-//   {name: 'Adverbs', value: 'adverbs'},
-//   {name: 'Adjective', value: 'adjective'},
-// ];
-const difficultyList = [
-  {name: 'Easy', value: 'easy'},
-  {name: 'Intermediate', value: 'intermediate'},
-  {name: 'Difficult', value: 'hard'},
-];
+import {difficulty_list} from '../../constatnts';
 
 import {generateQuiz} from '../../functions';
 
-const Setup = ({navigation}) => {
-  const {setQuiz} = useContext(QuizContext);
+import {play_type} from '../../constatnts';
 
-  //   state
-  //   const [category, setCategory] = useState('');
+const Setup = ({navigation}) => {
+  const {play, setQuiz, selectedFriend, setSelectedFriend, friendsList} =
+    useContext(QuizContext);
 
   const [difficulty, setDifficulty] = useState('');
+  const [addFriend, setAddFriend] = useState(false);
 
   const onStart = () => {
     console.log('start');
@@ -71,30 +61,25 @@ const Setup = ({navigation}) => {
         </BackButton>
       </Pressable>
 
-      {/* <ButtonComponent text="Randomize" /> */}
-      {/* <CategorySelect>
-        <Select
-          selectedValue={category}
-          minWidth="200"
-          accessibilityLabel="Select category"
-          placeholder="Select category"
-          _selectedItem={{
-            bg: '#49D395',
-            endIcon: <CheckIcon size="5" />,
-          }}
-          mt={1}
-          onValueChange={itemValue => setCategory(itemValue)}>
-          {categoryList.map((item, index) => {
-            return (
-              <Select.Item
-                key={`category_${index}`}
-                label={item.name}
-                value={item.value}
-              />
-            );
-          })}
-        </Select>
-      </CategorySelect> */}
+      {play === play_type.online ? (
+        <Online>
+          <AddButton onPress={() => setAddFriend(true)}>
+            <AddButtonText>Add friend </AddButtonText>
+          </AddButton>
+          <FriendList
+            select={selectedFriend}
+            onSelect={setSelectedFriend}
+            list={friendsList}
+          />
+
+          <Modal
+            isOpen={addFriend}
+            onClose={() => setAddFriend(false)}
+            size="lg">
+            <FriendModal />
+          </Modal>
+        </Online>
+      ) : null}
 
       <CategorySelect>
         <Select
@@ -108,7 +93,7 @@ const Setup = ({navigation}) => {
           }}
           mt={1}
           onValueChange={itemValue => setDifficulty(itemValue)}>
-          {difficultyList.map((item, index) => {
+          {difficulty_list.map((item, index) => {
             return (
               <Select.Item
                 key={`difficulty_${index}`}
@@ -164,6 +149,28 @@ const StartButton = styled(Pressable)`
 
 const StartIcon = styled(Image)`
   ${[t.h12, t.objectContain, t.mXAuto]}
+`;
+
+const AddButton = styled(Pressable)`
+  ${[
+    t.bgGray700,
+    t.flex,
+    t.w32,
+    t.itemsCenter,
+    t.justifyCenter,
+    t.pY2,
+    t.rounded,
+    t.mLAuto,
+    t.mB8,
+  ]}
+`;
+
+const AddButtonText = styled(Text)`
+  ${[t.textWhite]}
+`;
+
+const Online = styled(Box)`
+  ${t.mB10}
 `;
 
 export default Setup;

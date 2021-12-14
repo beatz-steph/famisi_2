@@ -12,12 +12,6 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderAvatar />
 
-      <HeaderLife>
-        <HeaderLifeText>2</HeaderLifeText>
-        <HeaderLifeIcon source={Heart} alt="life" />
-        <HeaderLifeText>45:00</HeaderLifeText>
-      </HeaderLife>
-
       <HeaderPoints>
         <HeaderPointsIcon source={Coin} alt="coin" />
         <HeaderPointsText>5,200</HeaderPointsText>
@@ -41,18 +35,6 @@ const HeaderWrapper = styled(Box)`
 
 const HeaderAvatar = styled(Box)`
   ${[t.w10, t.h10, t.roundedFull, t.bgGray300, {borderRadius: 50}]}
-`;
-
-const HeaderLife = styled(Box)`
-  ${[t.flex, t.flexRow]}
-`;
-
-const HeaderLifeText = styled(Text)`
-  ${[t.textWhite, t.fontSemibold]}
-`;
-
-const HeaderLifeIcon = styled(Image)`
-  ${[t.h6, t.objectContain, t.w10]}
 `;
 
 const HeaderPoints = styled(Box)`

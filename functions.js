@@ -16,13 +16,6 @@ export const generateQuiz = difficulty => {
     }
   }
 
-  //   for (let index = 0; list.length < 6; index++) {
-  //     const number = getRndInteger(0, difficulty_list.length);
-  //     if (!list.includes(number)) {
-  //       list.push(number);
-  //     }
-  //   }
-
   list.map(item => {
     quiz.push(difficulty_list[item]);
   });

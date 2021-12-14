@@ -17,7 +17,7 @@ const QuizBoard = ({word, meaning}) => {
 };
 
 const QuizBoardBody = styled(Box)`
-  ${[t.wFull, t.h40, t.bgGray600, t.roundedSm, t.relative, t.p8]}
+  ${[t.wFull, t.h40, t.bgGray700, t.roundedSm, t.relative, t.p8]}
 `;
 
 const QuizMain = styled(Box)`

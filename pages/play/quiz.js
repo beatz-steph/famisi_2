@@ -12,23 +12,26 @@ import QuizBoard from '../../components/quizBoard';
 import QuizOption from '../../components/quizOption';
 import ButtonComponent from '../../components/button';
 
+import {play_type} from '../../constatnts';
+
 const Quiz = ({navigation}) => {
-  const {quiz, answers, setAnswers} = useContext(QuizContext);
+  const {quiz, answers, setAnswers, play} = useContext(QuizContext);
   const [current, setCurrent] = useState(0);
   const [data, setData] = useState({});
   const [selected, setSelected] = useState('');
 
   const __handleNext = () => {
+    if (play === play_type.online) {
+      navigation.navigate('Waiting');
+    }
+
     if (answers.length === 5) {
       setAnswers(prevanswers => [...prevanswers, selected]);
       navigation.navigate('Success');
-      console.log({answers, quiz});
     } else {
       setAnswers(prevanswers => [...prevanswers, selected]);
       setSelected('');
       setCurrent(prevcurrent => prevcurrent + 1);
-
-      console.log({answers, quiz});
     }
   };
 
@@ -45,7 +48,7 @@ const Quiz = ({navigation}) => {
 
       {/* quiz */}
       <QuizBoardHolder>
-        <QuizBoard word={data.word} meaning={data.meaning} />
+        <QuizBoard word={data?.word} meaning={data?.meaning} />
       </QuizBoardHolder>
       <QuizOptionHolder>
         {data &&

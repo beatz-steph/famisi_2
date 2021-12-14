@@ -1,27 +1,32 @@
 import React, {useEffect} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
-import {Box} from 'native-base';
+import {Box, Text} from 'native-base';
 
 // image
+const games = [{}, {}, {}];
 
 // component
 import Header from '../components/header';
-import Zone from '../components/zone';
 import MyTabBar from '../components/tabBar';
 
-const Home = ({navigation, setShowBottomNavBar}) => {
+import Gamecard from '../components/gamecard';
+
+const Games = ({navigation, setShowBottomNavBar}) => {
   return (
     <SView>
       {/* Header */}
       <Header />
 
+      <Title>Games </Title>
       {/* zones */}
 
-      <Zone navigation={navigation} />
+      {games.map((item, index) => {
+        return <Gamecard />;
+      })}
 
       {/* Navigation */}
-      <MyTabBar navigation={navigation} active="Home" />
+      <MyTabBar navigation={navigation} active="Games" />
     </SView>
   );
 };
@@ -30,4 +35,8 @@ const SView = styled(Box)`
   ${[t.mB4, t.bgWhite, t.p2, t.hFull, t.relative]}
 `;
 
-export default Home;
+const Title = styled(Text)`
+  ${[t.text4xl, t.fontBold, t.mL4, t.mT2, t.mB8]}
+`;
+
+export default Games;
