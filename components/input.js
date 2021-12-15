@@ -3,11 +3,17 @@ import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Text, Box, Input} from 'native-base';
 
-const InputComponent = ({label, placeholder, type, name, value}) => {
+const InputComponent = ({label, placeholder, type, name, value, onChange}) => {
   return (
     <InputBody>
       {label && <InputLabel>{label}</InputLabel>}
-      <InputTag type={type} placeholder={placeholder || ''} />
+      <InputTag
+        name={name}
+        value={value}
+        onChangeText={onChange}
+        type={type}
+        placeholder={placeholder || ''}
+      />
     </InputBody>
   );
 };

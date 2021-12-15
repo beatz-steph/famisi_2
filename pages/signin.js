@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
-import {Text, Image, Box, Center} from 'native-base';
+import {Text, Image, Box, Center, useToast, Spinner} from 'native-base';
 
 const Logo = require('../assets/logo.png');
 
@@ -9,9 +9,39 @@ const Logo = require('../assets/logo.png');
 import Button from '../components/button';
 import Input from '../components/input';
 
+import {login} from '../services';
+import {storeAppData} from '../functions';
+import AppContext from '../context/appContext';
+
 const SignIn = ({navigation, setInitial}) => {
-  const onContinue = () => {
-    setInitial('home');
+  const {setAuth} = useContext(AppContext);
+  const toast = useToast();
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const __login = async () => {
+    setLoading(true);
+
+    const onSuccess = async data => {
+      setLoading(false);
+      await storeAppData(data.user);
+      console.log({data});
+      setAuth(data);
+    };
+
+    const onFailure = (err, message) => {
+      setLoading(false);
+      toast.show({
+        status: 'error',
+        description: message,
+      });
+    };
+
+    console.log({name: username, password});
+
+    await login({name: username, password}, onSuccess, onFailure);
   };
 
   return (
@@ -23,17 +53,33 @@ const SignIn = ({navigation, setInitial}) => {
       <HeaderText>Welcome to Famisi</HeaderText>
 
       <InputWrapper>
-        <Input label="Username" placeholder="Your username" type="text" />
+        <Input
+          label="Username"
+          placeholder="Your username"
+          type="text"
+          onChange={e => {
+            setUsername(e);
+          }}
+        />
       </InputWrapper>
       <InputWrapper>
-        <Input label="Password" placeholder="******" type="password" />
+        <Input
+          label="Password"
+          placeholder="******"
+          type="password"
+          onChange={e => setPassword(e)}
+        />
       </InputWrapper>
 
       <Forgot>
         <ForgotText>Forgot password?</ForgotText>
       </Forgot>
       <ButtonHolder>
-        <Button text="Sign in" onPress={onContinue} />
+        {loading ? (
+          <Spinner color="#49D395" />
+        ) : (
+          <Button text="Sign in" onPress={__login} />
+        )}
       </ButtonHolder>
       <SignUp>
         <DontHaveAccount onPress={() => navigation.push('SignUp')}>

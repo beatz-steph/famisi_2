@@ -3,7 +3,7 @@ import {ImageBackground} from 'react-native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Image, Pressable, Text} from 'native-base';
-import QuizContext from './quizContext';
+import QuizContext from '../../context/quizContext';
 
 // image
 const SuceessImg = require('../../assets/successBg.png');

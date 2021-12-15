@@ -8,3 +8,5 @@ export const difficulty_list = [
   {name: 'Intermediate', value: 'intermediate'},
   {name: 'Difficult', value: 'hard'},
 ];
+
+export const apiRoot = 'https://a230-34-105-157-78.ngrok.io/api';

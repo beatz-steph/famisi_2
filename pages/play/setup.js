@@ -11,7 +11,7 @@ import {
   CheckIcon,
   Modal,
 } from 'native-base';
-import QuizContext from './quizContext';
+import QuizContext from '../../context/quizContext';
 
 // image
 const Arrow = require('../../assets/arrow.png');

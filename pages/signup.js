@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {
@@ -8,6 +8,9 @@ import {
   Center,
   ScrollView,
   ChevronLeftIcon,
+  Pressable,
+  useToast,
+  Spinner,
 } from 'native-base';
 
 const Logo = require('../assets/logo.png');
@@ -16,7 +19,62 @@ const Logo = require('../assets/logo.png');
 import Button from '../components/button';
 import Input from '../components/input';
 
+import {signup} from '../services';
+import {storeAppData} from '../functions';
+import AppContext from '../context/appContext';
+
 const SignUpScreen = ({navigation}) => {
+  const {setAuth} = useContext(AppContext);
+  const toast = useToast();
+
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmpassword, setConfirmpassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const __signup = async e => {
+    if (password.length < 5) {
+      toast.show({
+        status: 'error',
+        description: 'Password length must be greater than 4 characters',
+      });
+      return;
+    }
+
+    if (password !== confirmpassword) {
+      toast.show({
+        status: 'error',
+        description: 'Passwords do not match',
+      });
+
+      return;
+    }
+
+    setLoading(true);
+
+    const onSuccess = async data => {
+      setLoading(false);
+      await storeAppData(data.data.user);
+      console.log({data: data.data.user});
+      setAuth(data.data.user);
+
+      toast.show({
+        status: 'success',
+        description: `Welcome to famisi trivia ${data?.user?.username || ''}`,
+      });
+    };
+
+    const onFailure = (err, message) => {
+      setLoading(false);
+      toast.show({
+        status: 'error',
+        description: message,
+      });
+    };
+
+    await signup({username, password, email}, onSuccess, onFailure);
+  };
   return (
     <SView>
       <BackButton onPress={() => navigation.goBack()}>
@@ -33,23 +91,51 @@ const SignUpScreen = ({navigation}) => {
       <HeaderText>Create an account</HeaderText>
       <Holder>
         <InputWrapper>
-          <Input label="Email" placeholder="Your email" type="text" />
+          <Input
+            label="Email"
+            placeholder="Your email"
+            type="text"
+            onChange={e => {
+              setEmail(e);
+            }}
+          />
         </InputWrapper>
         <InputWrapper>
-          <Input label="Username" placeholder="Your username" type="text" />
+          <Input
+            label="Username"
+            placeholder="Your username"
+            type="text"
+            onChange={e => {
+              setUsername(e);
+            }}
+          />
         </InputWrapper>
         <InputWrapper>
-          <Input label="Password" placeholder="******" type="password" />
+          <Input
+            label="Password"
+            placeholder="******"
+            type="password"
+            onChange={e => {
+              setPassword(e);
+            }}
+          />
         </InputWrapper>
         <InputWrapper>
           <Input
             label="Confirm password"
             placeholder="******"
             type="password"
+            onChange={e => {
+              setConfirmpassword(e);
+            }}
           />
         </InputWrapper>
         <ButtonHolder>
-          <Button text="Continue" />
+          {loading ? (
+            <Spinner color="#49D395" />
+          ) : (
+            <Button onPress={__signup} text="Continue" />
+          )}
         </ButtonHolder>
         <SignUp>
           <DontHaveAccount onPress={() => navigation.goBack()}>
@@ -65,7 +151,7 @@ const SView = styled(Box)`
   ${[t.mB4, t.bgWhite, t.p8, t.hFull]}
 `;
 
-const BackButton = styled(Box)`
+const BackButton = styled(Pressable)`
   ${[t.flex, t.itemsCenter, t.flexRow, t.mB8]}
 `;
 
@@ -89,7 +175,7 @@ const InputWrapper = styled(Box)`
   ${[t.mB8]}
 `;
 
-const ButtonHolder = styled(Box)`
+const ButtonHolder = styled(Pressable)`
   ${[t.mT10]}
 `;
 

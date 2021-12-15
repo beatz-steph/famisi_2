@@ -8,7 +8,7 @@ const Bg = require('../assets/bg.png');
 
 import {play_type} from '../constatnts';
 
-import QuizContext from '../pages/play/quizContext';
+import QuizContext from '../context/quizContext';
 
 const Zone = ({navigation}) => {
   const {setPlay} = useContext(QuizContext);

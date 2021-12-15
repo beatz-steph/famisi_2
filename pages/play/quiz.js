@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Image, Pressable, ScrollView} from 'native-base';
-import QuizContext from './quizContext';
+import QuizContext from '../../context/quizContext';
 
 // image
 const Close = require('../../assets/close.png');
@@ -25,7 +25,7 @@ const Quiz = ({navigation}) => {
       navigation.navigate('Waiting');
     }
 
-    if (answers.length === 5) {
+    if (answers.length > 4) {
       setAnswers(prevanswers => [...prevanswers, selected]);
       navigation.navigate('Success');
     } else {
