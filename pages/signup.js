@@ -66,6 +66,7 @@ const SignUpScreen = ({navigation}) => {
     };
 
     const onFailure = (err, message) => {
+      console.log({err});
       setLoading(false);
       toast.show({
         status: 'error',

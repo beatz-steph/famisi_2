@@ -1,28 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
-import {Box, Text, useToast} from 'native-base';
+import {Box, Text, useToast, Spinner} from 'native-base';
 
 import Input from './input';
-import ButtonComponent from './button';
+import Button from './button';
 
-const FriendModal = ({loading, setLoading}) => {
+import {addFriend} from '../services';
+
+const FriendModal = ({loading, setLoading, auth, __fetchFriends, onClose}) => {
+  const [friend, setFriend] = useState('');
   const toast = useToast();
+
+  const __addFriend = async () => {
+    setLoading(true);
+
+    const onSuccess = data => {
+      setLoading(false);
+
+      toast.show({
+        status: 'success',
+        description: 'Friend added successfully',
+      });
+
+      __fetchFriends();
+      onClose();
+    };
+    const onFailure = (err, message) => {
+      setLoading(false);
+      console.log('on Failure');
+      console.log({err, message});
+    };
+    await addFriend({id: auth._id, friend}, onSuccess, onFailure);
+  };
   return (
     <ModalBody>
       <ModalText>Add friend</ModalText>
-      <Input />
+      <Input onChange={e => setFriend(e)} />
       <Separator />
-      <ButtonComponent
-        text="Add"
-        onPress={() =>
-          toast.show({
-            title: 'Account verified',
-            status: 'success',
-            description: 'Thanks for signing up with us.',
-          })
-        }
-      />
+      <ButtonHolder>
+        {loading ? (
+          <Spinner color="#49D395" />
+        ) : (
+          <Button text="Add" onPress={__addFriend} />
+        )}
+      </ButtonHolder>
     </ModalBody>
   );
 };
@@ -36,6 +58,10 @@ const ModalText = styled(Text)`
 
 const Separator = styled(Box)`
   ${[t.h8]}
+`;
+
+const ButtonHolder = styled(Box)`
+  ${[t.mT2]}
 `;
 
 export default FriendModal;

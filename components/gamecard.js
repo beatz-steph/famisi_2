@@ -1,21 +1,90 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
+import {NavigationContext} from '@react-navigation/native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box, Text, Pressable, Image} from 'native-base';
 
 const PonitImage = require('../assets/coin.png');
 
-const Gamecard = () => {
+import QuizContext from '../context/quizContext';
+
+import {play_type} from '../constatnts';
+import AppContext from '../context/appContext';
+
+const Gamecard = ({data}) => {
+  const {setQuiz, setPlay, setSelectedGame, setOpponent} =
+    useContext(QuizContext);
+  const {auth, setGameLoad} = useContext(AppContext);
+  const navigation = useContext(NavigationContext);
+
+  const [canPlay, setCanPlay] = useState(false);
+
+  const player = auth._id === data.player1._id ? 'player1' : 'player2';
+
+  const __onPress = () => {
+    if (!canPlay) {
+      return;
+    }
+
+    const {player1, player2} = data;
+
+    const info = player1._id === auth._id ? player1.username : player2.username;
+
+    setQuiz(data?.quiz);
+    setPlay(play_type.online);
+    setSelectedGame(data);
+    setOpponent(info);
+    setGameLoad(false);
+    navigation.navigate('Play', {screen: 'Quiz'});
+  };
+
+  useEffect(() => {
+    if (data.progress[player] === 'null') {
+      setCanPlay(true);
+    }
+  }, [data.progress, player]);
+
   return (
-    <Wrapper>
+    <Wrapper onPress={__onPress}>
       <ImageHolder>
-        <ImageItem alt="avatar" />
+        <ImageItem
+          alt="avatar"
+          source={{
+            uri:
+              `https://avatars.dicebear.com/v2/avataaars/${data?.player1?._id}.png` ||
+              '',
+          }}
+        />
         <ImageText>VS</ImageText>
-        <ImageItem alt="avatar" />
+        <ImageItem
+          alt="avatar"
+          source={{
+            uri:
+              `https://avatars.dicebear.com/v2/avataaars/${data?.player2?._id}.png` ||
+              '',
+          }}
+        />
       </ImageHolder>
       <OtherHolder>
-        <Status> ongoing</Status>
-        <PointsIcon source={PonitImage} alt="coin" />
+        {canPlay && !data.done ? <Status> ongoing</Status> : null}
+
+        {!canPlay && !data.done ? <Status> waiting</Status> : null}
+
+        {!canPlay && data.done ? (
+          <>
+            {data.winner === player ? (
+              <>
+                <Status> +500</Status>
+                <PointsIcon source={PonitImage} alt="coin" />
+              </>
+            ) : (
+              <>
+                <Status> -200</Status>
+                <PointsIcon source={PonitImage} alt="coin" />
+              </>
+            )}
+          </>
+        ) : null}
       </OtherHolder>
     </Wrapper>
   );
@@ -46,13 +115,13 @@ const OtherHolder = styled(Box)`
 `;
 
 const ImageItem = styled(Image)`
-  ${[t.w10, t.h10, t.roundedFull, t.bgGray700]}
+  ${[t.w10, t.h10, t.roundedFull]}
 `;
 const ImageText = styled(Text)`
   ${[t.fontBold, t.mX2, t.text2xl, t.italic]}
 `;
 const Status = styled(Text)`
-  ${[t.italic]}
+  ${[t.italic, t.mR2]}
 `;
 
 const PointsIcon = styled(Image)`

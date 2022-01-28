@@ -2,17 +2,21 @@ import React from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Text, Image, Box, Pressable} from 'native-base';
+import {useContext} from 'react/cjs/react.development';
+import AppContext from '../context/appContext';
 
 // images
 const Home = require('../assets/home.png');
 const Board = require('../assets/board.png');
 
 const MyTabBar = ({navigation, showBottomNavBar, active}) => {
+  const {setGameLoad} = useContext(AppContext);
   return (
     <FooterHolder showBottomNavBar={showBottomNavBar}>
       <FooterInner>
         <OptionHolder
           onPress={() => {
+            setGameLoad(false);
             navigation.navigate('Home');
           }}>
           <OptionActive active={active === 'Home'}>
@@ -21,6 +25,7 @@ const MyTabBar = ({navigation, showBottomNavBar, active}) => {
         </OptionHolder>
         <OptionHolder
           onPress={() => {
+            setGameLoad(false);
             navigation.navigate('Games');
           }}>
           <OptionActive active={active === 'Games'}>

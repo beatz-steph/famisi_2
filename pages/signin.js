@@ -28,10 +28,11 @@ const SignIn = ({navigation, setInitial}) => {
       setLoading(false);
       await storeAppData(data.user);
       console.log({data});
-      setAuth(data);
+      setAuth(data.user);
     };
 
     const onFailure = (err, message) => {
+      console.log(err);
       setLoading(false);
       toast.show({
         status: 'error',

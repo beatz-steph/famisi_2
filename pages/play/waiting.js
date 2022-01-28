@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {ImageBackground} from 'react-native';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
@@ -11,17 +11,36 @@ const Coin = require('../../assets/coin.png');
 
 // component
 import {calculateResult} from '../../functions';
+import AppContext from '../../context/appContext';
 
 const Waiting = ({navigation}) => {
-  const {quiz, answers} = useContext(QuizContext);
+  const {
+    quiz,
+    answers,
+    setQuiz,
+    setAnswers,
+    setPlay,
+    setSelectedFriend,
+    selectedFriend,
+    selectedGame,
+    opponent,
+    setOpponent,
+  } = useContext(QuizContext);
+
+  const {auth} = useContext(AppContext);
+
   return (
     <SView>
       <SuccessBg>
         <MainCard>
-          <MainCardText>Waiting for joshua ...</MainCardText>
+          <MainCardText>Waiting for {opponent} ...</MainCardText>
 
           <MainCardButton
             onPress={() => {
+              setPlay('local');
+              setQuiz([]);
+              setAnswers([]);
+              setSelectedFriend(null);
               navigation.reset({
                 index: 0,
                 routes: [{name: 'Home'}],

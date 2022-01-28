@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {Box} from 'native-base';

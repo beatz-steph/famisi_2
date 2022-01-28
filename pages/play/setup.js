@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {
@@ -10,8 +10,11 @@ import {
   Select,
   CheckIcon,
   Modal,
+  Spinner,
+  useToast,
 } from 'native-base';
 import QuizContext from '../../context/quizContext';
+import AppContext from '../../context/appContext';
 
 // image
 const Arrow = require('../../assets/arrow.png');
@@ -26,21 +29,95 @@ import {generateQuiz} from '../../functions';
 
 import {play_type} from '../../constatnts';
 
+import {fetchFriends, startGame} from '../../services';
+
 const Setup = ({navigation}) => {
-  const {play, setQuiz, selectedFriend, setSelectedFriend, friendsList} =
-    useContext(QuizContext);
+  const toast = useToast();
+  const {
+    play,
+    setQuiz,
+    selectedFriend,
+    setSelectedFriend,
+    friendsList,
+    setFriendsList,
+    setPlay,
+    setSelectedGame,
+    setOpponent,
+  } = useContext(QuizContext);
+
+  const {auth} = useContext(AppContext);
 
   const [difficulty, setDifficulty] = useState('');
   const [addFriend, setAddFriend] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [startOnline, setStartOnline] = useState(false);
 
-  const onStart = () => {
+  const onStart = async () => {
     console.log('start');
     const quiz = generateQuiz(difficulty);
 
-    setQuiz(quiz);
+    if (play === play_type.local) {
+      setDifficulty('');
+      setQuiz(quiz);
+      navigation.navigate('Quiz');
+    } else {
+      setStartOnline(true);
+      const info = {
+        player1: auth._id,
+        player2: selectedFriend._id,
+        quiz,
+        progress: {
+          player1: 'null',
+          player2: 'null',
+        },
+      };
+      const onSuccess = data => {
+        const infoNew = data.newGame;
+        setStartOnline(false);
+        console.log(data);
+        //newGame
 
-    navigation.navigate('Quiz');
+        // setQuiz(infoNew?.quiz);
+        // setPlay(play_type.online);
+        // setSelectedGame(infoNew.newGame);
+        // setOpponent(selectedFriend.username);
+        navigation.navigate('Games');
+      };
+
+      const onFailure = (err, message) => {
+        setStartOnline(false);
+        console.log({err, message});
+        toast.show({status: 'error', description: message});
+      };
+
+      await startGame(info, onSuccess, onFailure);
+      setDifficulty('');
+      setSelectedFriend(null);
+    }
   };
+
+  const __fetchFriends = useCallback(async () => {
+    setLoading(true);
+
+    const onSuccess = async data => {
+      setLoading(false);
+      setFriendsList(data);
+    };
+
+    const onFailure = (err, message) => {
+      setLoading(false);
+      // toast.show({
+      //   status: 'error',
+      //   description: message,
+      // });
+    };
+
+    await fetchFriends(auth, onSuccess, onFailure);
+  }, [auth, setFriendsList]);
+
+  useEffect(() => {
+    __fetchFriends();
+  }, [__fetchFriends]);
 
   return (
     <SView>
@@ -63,21 +140,32 @@ const Setup = ({navigation}) => {
 
       {play === play_type.online ? (
         <Online>
-          <AddButton onPress={() => setAddFriend(true)}>
-            <AddButtonText>Add friend </AddButtonText>
-          </AddButton>
-          <FriendList
-            select={selectedFriend}
-            onSelect={setSelectedFriend}
-            list={friendsList}
-          />
+          {loading ? (
+            <Spinner color="#49D395" />
+          ) : (
+            <>
+              <AddButton onPress={() => setAddFriend(true)}>
+                <AddButtonText>Add friend </AddButtonText>
+              </AddButton>
+              <FriendList
+                select={selectedFriend}
+                onSelect={setSelectedFriend}
+                list={friendsList}
+              />
 
-          <Modal
-            isOpen={addFriend}
-            onClose={() => setAddFriend(false)}
-            size="lg">
-            <FriendModal />
-          </Modal>
+              <Modal
+                isOpen={addFriend}
+                onClose={() => setAddFriend(false)}
+                size="lg">
+                <FriendModal
+                  auth={auth}
+                  loading={loading}
+                  setLoading={setLoading}
+                  __fetchFriends={__fetchFriends}
+                />
+              </Modal>
+            </>
+          )}
         </Online>
       ) : null}
 
@@ -107,7 +195,11 @@ const Setup = ({navigation}) => {
       <StartHolder>
         {difficulty ? (
           <StartButton onPress={onStart}>
-            <StartIcon source={Arrow} alt="start" />
+            {startOnline ? (
+              <Spinner color="#49D395" />
+            ) : (
+              <StartIcon source={Arrow} alt="start" />
+            )}
           </StartButton>
         ) : null}
       </StartHolder>

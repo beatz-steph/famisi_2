@@ -13,7 +13,8 @@ const Coin = require('../../assets/coin.png');
 import {calculateResult} from '../../functions';
 
 const Success = ({navigation}) => {
-  const {quiz, answers} = useContext(QuizContext);
+  const {quiz, answers, setQuiz, setAnswers, setPlay, setSelectedFriend} =
+    useContext(QuizContext);
   return (
     <SView>
       <SuccessBg source={SuceessImg} alt="bg">
@@ -29,6 +30,10 @@ const Success = ({navigation}) => {
 
           <SuccessCardButton
             onPress={() => {
+              setPlay('local');
+              setQuiz([]);
+              setAnswers([]);
+              setSelectedFriend(null);
               navigation.reset({
                 index: 0,
                 routes: [{name: 'Home'}],

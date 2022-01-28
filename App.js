@@ -34,24 +34,10 @@ function App() {
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
-  const [friendsList, setFriendsList] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      name: 'First Item',
-      imageUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbG9xj0XIQP_3kdm-LZelILnKlD4wvQLrJqL7S5cIweIeUr1amHL1YK-zUnFsgV2RjwLc&usqp=CAU',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      name: 'Second Item',
-      imageUrl: '',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      name: 'Third Item',
-      imageUrl: '',
-    },
-  ]);
+  const [friendsList, setFriendsList] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [opponent, setOpponent] = useState('');
+  const [gameLoad, setGameLoad] = useState(false);
 
   const resetAllQuizInfo = () => {
     setQuiz([]);
@@ -71,6 +57,8 @@ function App() {
         initial,
         setInitial,
         isConnected: netInfo.isConnected,
+        gameLoad,
+        setGameLoad,
       }}>
       <QuizContext.Provider
         value={{
@@ -85,6 +73,10 @@ function App() {
           friendsList,
           setFriendsList,
           resetAllQuizInfo,
+          selectedGame,
+          setSelectedGame,
+          opponent,
+          setOpponent,
         }}>
         <NavigationContainer>
           <NativeBaseProvider>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {t} from 'react-native-tailwindcss';
 import styled from 'styled-components/native';
 import {
@@ -19,8 +19,8 @@ const FriendList = ({list = [], select, onSelect}) => {
         {list.map((item, index) => {
           return (
             <Item
-              imageUrl={item.imageUrl}
-              name={item.name}
+              imageUrl={`https://avatars.dicebear.com/v2/avataaars/${item?._id}.png`}
+              name={item.username}
               select={select}
               onSelect={onSelect}
               {...item}
@@ -32,11 +32,11 @@ const FriendList = ({list = [], select, onSelect}) => {
   );
 };
 
-const Item = ({imageUrl, name, select, onSelect, id}) => (
+const Item = ({imageUrl, name, select, onSelect, _id}) => (
   <ImageWrapper
-    active={select === id}
+    active={select?._id === _id}
     onPress={() => {
-      onSelect(id);
+      onSelect({name, _id, imageUrl});
     }}>
     <ImageMain
       source={{
