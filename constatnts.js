@@ -9,5 +9,5 @@ export const difficulty_list = [
   {name: 'Difficult', value: 'hard'},
 ];
 
-export const apiRoot = 'https://44db-102-89-1-18.ngrok.io/api';
+export const apiRoot = 'https://famisi.herokuapp.com/api';
 //https://famisi.herokuapp.com/api
