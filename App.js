@@ -17,6 +17,8 @@ import Games from './pages/games';
 import QuizContext from './context/quizContext';
 import AppContext from './context/appContext';
 import {getAppData} from './functions';
+import {fetchDb} from './services';
+import {groupOnlineDb} from './functions';
 
 // set up navigation
 const Stack = createNativeStackNavigator();
@@ -28,6 +30,7 @@ function App() {
   const [initial, setInitial] = useState(true);
   const [auth, setAuth] = useState(null);
   const [showBottomNavBar, setShowBottomNavBar] = useState(true);
+  const [onlineDb, setOnlineDb] = useState(onlineDb);
 
   // states for quiz
   const [play, setPlay] = useState('');
@@ -48,6 +51,17 @@ function App() {
   useEffect(() => {
     getAppData;
   });
+
+  const FetchOnlineDB = async () => {
+    await fetchDb(data => {
+      const grouped = groupOnlineDb(data?.quiz || []);
+      setOnlineDb(grouped);
+    });
+  };
+
+  useEffect(() => {
+    FetchOnlineDB();
+  }, []);
 
   return (
     <AppContext.Provider
@@ -77,6 +91,7 @@ function App() {
           setSelectedGame,
           opponent,
           setOpponent,
+          onlineDb,
         }}>
         <NavigationContainer>
           <NativeBaseProvider>

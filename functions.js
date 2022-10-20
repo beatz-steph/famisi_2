@@ -5,8 +5,8 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export const generateQuiz = difficulty => {
-  const difficulty_list = db[difficulty];
+export const generateQuiz = (difficulty, onlineDb) => {
+  const difficulty_list = onlineDb ? onlineDb[difficulty] : db[difficulty];
   const list = [];
   const quiz = [];
 
@@ -99,4 +99,20 @@ export const asyncCatch = async (
     const errorMessage = errorHandler(err, defaultMessage);
     errCb(err, errorMessage);
   }
+};
+
+/**
+ *
+ * @param {[]} onlineDbData
+ */
+
+export const groupOnlineDb = onlineDbData => {
+  const easy = onlineDbData.filter(item => item?.difficulty === 'easy');
+  const intermediate = onlineDbData.filter(
+    item => item?.difficulty === 'intermediate',
+  );
+
+  const hard = onlineDbData.filter(item => item?.difficulty === 'hard');
+
+  return {easy, intermediate, hard};
 };

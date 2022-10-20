@@ -171,3 +171,22 @@ export const updateGame = async (
     onFailure,
   );
 };
+
+export const fetchDb = async (
+  onSuccess = () => {},
+  onFailure = (err, message) => {
+    console.log('on Failure');
+    console.log({err, message});
+  },
+) => {
+  asyncCatch(
+    async () => {
+      //comment out make api call to login
+      const {data} = await reqClient.get('/quiz');
+
+      onSuccess(data);
+    },
+    'Error fetching quizes',
+    onFailure,
+  );
+};

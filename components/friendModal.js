@@ -30,6 +30,11 @@ const FriendModal = ({loading, setLoading, auth, __fetchFriends, onClose}) => {
       setLoading(false);
       console.log('on Failure');
       console.log({err, message});
+      toast.show({
+        status: 'error',
+        description: 'Friend not found',
+      });
+      onClose();
     };
     await addFriend({id: auth._id, friend}, onSuccess, onFailure);
   };

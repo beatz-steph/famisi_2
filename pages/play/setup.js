@@ -43,6 +43,7 @@ const Setup = ({navigation}) => {
     setPlay,
     setSelectedGame,
     setOpponent,
+    onlineDb,
   } = useContext(QuizContext);
 
   const {auth} = useContext(AppContext);
@@ -54,7 +55,7 @@ const Setup = ({navigation}) => {
 
   const onStart = async () => {
     console.log('start');
-    const quiz = generateQuiz(difficulty);
+    const quiz = generateQuiz(difficulty, onlineDb);
 
     if (play === play_type.local) {
       setDifficulty('');
@@ -162,6 +163,7 @@ const Setup = ({navigation}) => {
                   loading={loading}
                   setLoading={setLoading}
                   __fetchFriends={__fetchFriends}
+                  onClose={() => setAddFriend(false)}
                 />
               </Modal>
             </>

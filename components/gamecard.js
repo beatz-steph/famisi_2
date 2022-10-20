@@ -72,17 +72,25 @@ const Gamecard = ({data}) => {
 
         {!canPlay && data.done ? (
           <>
-            {data.winner === player ? (
+            {data.winner !== 'draw' && data.winner === player ? (
               <>
                 <Status> +500</Status>
                 <PointsIcon source={PonitImage} alt="coin" />
               </>
-            ) : (
+            ) : null}
+            {data.winner !== 'draw' && data.winner !== player ? (
               <>
                 <Status> -200</Status>
                 <PointsIcon source={PonitImage} alt="coin" />
               </>
-            )}
+            ) : null}
+
+            {data.winner === 'draw' ? (
+              <>
+                <Status> +200</Status>
+                <PointsIcon source={PonitImage} alt="coin" />
+              </>
+            ) : null}
           </>
         ) : null}
       </OtherHolder>
